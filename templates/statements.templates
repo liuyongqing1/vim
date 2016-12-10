@@ -2,66 +2,79 @@
 §  Statements
 § =============================================================
 
-§ -------------------------------------------------------------
-§  Assignment
-§ -------------------------------------------------------------
+== Statements.case == map:sc, shortcut:c  ==
+case <CURSOR> in
+	)
+	;;
 
-== Statements.let variable == map:sv, sc:v ==
-let <CURSOR> = <+VAL+>
-== Statements.let list == map:sl, sc:l ==
-let <CURSOR> = [ <+VAL+>, <+VAL+> ]
-== Statements.let dictionary == map:sd, sc:d ==
-let <CURSOR> = {
-			\ <+KEY+> : <+VAL+>,
-			\ <+KEY+> : <+VAL+>,
-			\ <+KEY+> : <+VAL+>,
-			\ }
-== ENDTEMPLATE ==
+	)
+	;;
 
-§ -------------------------------------------------------------
-§  Control
-§ -------------------------------------------------------------
+	*)
+	;;
 
-== SEP: Statements.sep1 ==
-
-== Statements.for == map:sf, sc:f ==
-for <CURSOR> in <+LIST+>
-	<SPLIT><-LOOP_BODY->
-endfor
-== Statements.if, end == map:sif, sc:i ==
-if <CURSOR>
-	<SPLIT><-IF_PART->
-endif
-== Statements.if, else == map:sie, sc:i ==
-if <CURSOR>
-	<SPLIT><-IF_PART->
+esac    # --- end of case ---
+== Statements.elif == map:sei, shortcut:e  ==
+elif <CURSOR> ; then
+== Statements.for-in == map:sf, shortcut:f  ==
+for <CURSOR> in ; do
+<SPLIT><-LOOP_BODY->
+done
+== Statements.for == map:sfo, shortcut:f  ==
+for (( CNTR=0; CNTR<<CURSOR>0; CNTR+=1 )); do
+<SPLIT><-LOOP_BODY->
+done
+== Statements.if == map:si, shortcut:i  ==
+if <CURSOR> ; then
+<SPLIT><-IF_PART->
+fi
+== Statements.if-else == map:sie, shortcut:i  ==
+if <CURSOR> ; then
+<SPLIT><-IF_PART->
 else
 	<+ELSE_PART+>
-endif
-== Statements.elseif == map:sei, sc:e ==
-elseif <CURSOR>
-	<+ELSEIF_PART+>
-== Statements.else == map:sel, sc:e ==
-else
-	<CURSOR>
-== Statements.while == map:sw, sc:w ==
-while <CURSOR>
-	<SPLIT><-LOOP_BODY->
-endwhile
+fi
+== Statements.select == map:ss, shortcut:s  ==
+select <CURSOR> in ; do
+<SPLIT>done
+== Statements.until == map:su, shortcut:u  ==
+until <CURSOR> ; do
+<SPLIT>done
+== Statements.while == map:sw, shortcut:w  ==
+while <CURSOR> ; do
+<SPLIT>done
+== Statements.function == map:sfu, shortcut:f  ==
+|?FUNCTION_NAME| ()
+{
+<CURSOR><SPLIT>
+}	# ----------  end of function |FUNCTION_NAME|  ----------
 == ENDTEMPLATE ==
 
 § -------------------------------------------------------------
-§  Exception Handling
+
+== SEP: Statements.sep-print ==
+
+== Statements.echo == insert, map:se, shortcut:e  ==
+echo -e "<CURSOR><SPLIT>"
+== Statements.printf == insert, map:sp, shortcut:p  ==
+printf "%s\n" <CURSOR><SPLIT>
+== ENDTEMPLATE ==
+
 § -------------------------------------------------------------
 
-== Statements.try, catch == map:st, sc:t ==
-try
-	<CURSOR><SPLIT>
-catch //
-catch /.*/
-  echo "Internal error (" . v:exception . ")"
-  echo " - occurred at " . v:throwpoint
-finally
-endtry
+== SEP: Statements.sep-array ==
+
+== Statements.array element == insert, map:sae, shortcut:a  ==
+${<CURSOR><SPLIT>[]}
+== Statements.array elements, all == insert, map:saa, shortcut:a  ==
+${<CURSOR><SPLIT>[@]}
+== Statements.array elements, string == insert, map:sas, shortcut:s  ==
+${<CURSOR><SPLIT>[*]}
+== Statements.subarray == insert, map:ssa, shortcut:s  ==
+${<CURSOR><SPLIT>[@]::}
+== Statements.no of element == insert, map:san, shortcut:n  ==
+${#<CURSOR><SPLIT>[@]}
+== Statements.array indices== insert, map:sai, shortcut:i  ==
+${!<CURSOR><SPLIT>[@]}
 == ENDTEMPLATE ==
 

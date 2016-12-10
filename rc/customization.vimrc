@@ -1,14 +1,21 @@
-"===================================================================================
-"         FILE:  .vimrc
-"  DESCRIPTION:  suggestion for a personal configuration file ~/.vimrc
-"       AUTHOR:  Dr.-Ing. Fritz Mehner
-"      CREATED:  04.04.2009
-"     REVISION:  $Id: customization.vimrc,v 1.1 2012/02/11 16:37:29 mehner Exp $
-"===================================================================================
+"===============================================================================
 "
-"===================================================================================
+"          File:  customization.vimrc
+" 
+"   Description:  suggestion for a personal configuration file ~/.vimrc
+" 
+"   VIM Version:  7.0+
+"        Author:  Dr. Fritz Mehner (fgm), mehner.fritz@web.de
+"       Version:  1.0
+"       Created:  18.05.2013 21:59
+"      Revision:  ---
+"       License:  Copyright (c) 2013, Dr. Fritz Mehner
+"===============================================================================
+
+"
+"===============================================================================
 " GENERAL SETTINGS
-"===================================================================================
+"===============================================================================
 
 "-------------------------------------------------------------------------------
 " Use Vim settings, rather then Vi settings.
@@ -81,7 +88,7 @@ set wildmenu                    " command-line completion in an enhanced mode
 " The current directory is the directory of the file in the current window.
 "-------------------------------------------------------------------------------
 if has("autocmd")
-  autocmd BufEnter * :lchdir %:p:h
+  autocmd BufNewFile,BufRead * :lchdir %:p:h
 endif
 "
 "-------------------------------------------------------------------------------
@@ -129,43 +136,21 @@ endif " has("autocmd")
 "    F8   -  display next error   
 "-------------------------------------------------------------------------------
 "
-map   <silent> <F2>        :write<CR>
-map   <silent> <F3>        :Explore<CR>
-nmap  <silent> <F4>        :exe ":ptag ".expand("<cword>")<CR>
-map   <silent> <F5>        :copen<CR>
-map   <silent> <F6>        :cclose<CR>
-map   <silent> <F7>        :cp<CR>
-map   <silent> <F8>        :cn<CR>
+noremap   <silent> <F2>        :write<CR>
+noremap   <silent> <F3>        :Explore<CR>
+nnoremap  <silent> <F4>        :exe ":ptag ".expand("<cword>")<CR>
+noremap   <silent> <F5>        :copen<CR>
+noremap   <silent> <F6>        :cclose<CR>
+noremap   <silent> <F7>        :cp<CR>
+noremap   <silent> <F8>        :cn<CR>
 "
-imap  <silent> <F2>   <Esc>:write<CR>
-imap  <silent> <F3>   <Esc>:Explore<CR>
-imap  <silent> <F4>   <Esc>:exe ":ptag ".expand("<cword>")<CR>
-imap  <silent> <F5>   <Esc>:copen<CR>
-imap  <silent> <F6>   <Esc>:cclose<CR>
-imap  <silent> <F7>   <Esc>:cp<CR>
-imap  <silent> <F8>   <Esc>:cn<CR>
-"
-"-------------------------------------------------------------------------------
-" Fast switching between buffers
-" The current buffer will be saved before switching to the next one.
-" Choose :bprevious or :bnext
-"-------------------------------------------------------------------------------
-"
- map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly && 
-     \                  &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
-imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly && 
-     \                  &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
-"
-"-------------------------------------------------------------------------------
-" Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
-"-------------------------------------------------------------------------------
-nmap  <C-q>    :wqa<CR>
-"
-"-------------------------------------------------------------------------------
-" comma always followed by a space
-"-------------------------------------------------------------------------------
-inoremap  ,  ,<Space>
-"
+inoremap  <silent> <F2>   <Esc>:write<CR>
+inoremap  <silent> <F3>   <Esc>:Explore<CR>
+inoremap  <silent> <F4>   <Esc>:exe ":ptag ".expand("<cword>")<CR>
+inoremap  <silent> <F5>   <Esc>:copen<CR>
+inoremap  <silent> <F6>   <Esc>:cclose<CR>
+inoremap  <silent> <F7>   <Esc>:cp<CR>
+inoremap  <silent> <F8>   <Esc>:cn<CR>
 "-------------------------------------------------------------------------------
 " autocomplete parenthesis, brackets and braces
 "-------------------------------------------------------------------------------
@@ -173,50 +158,52 @@ inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 "
-vnoremap ( s()<Esc>P<Right>%
-vnoremap [ s[]<Esc>P<Right>%
-vnoremap { s{}<Esc>P<Right>%
+vnoremap ( s()<Esc>P
+vnoremap [ s[]<Esc>P
+vnoremap { s{}<Esc>P
 "
 "-------------------------------------------------------------------------------
-" autocomplete quotes (visual and select mode)
+" autocomplete quotes
 "-------------------------------------------------------------------------------
-xnoremap  '  s''<Esc>P<Right>
-xnoremap  "  s""<Esc>P<Right>
-xnoremap  `  s``<Esc>P<Right>
+vnoremap  '  s''<Esc>P<Right>
+vnoremap  "  s""<Esc>P<Right>
+vnoremap  `  s``<Esc>P<Right>
+"
+inoremap	'  '<Esc>:call QuoteInsertionWrapper("'")<CR>a
+inoremap	"  "<Esc>:call QuoteInsertionWrapper('"')<CR>a
+inoremap	`  `<Esc>:call QuoteInsertionWrapper('`')<CR>a
 "
 "-------------------------------------------------------------------------------
-" Change the working directory to the directory containing the current file
-"-------------------------------------------------------------------------------
-if has("autocmd")
-  autocmd BufEnter * :lchdir %:p:h
-endif " has("autocmd")
+" function QuoteInsertionWrapper			{{{3
 "
-"===================================================================================
+" Add a second quote only if the left and the right character are not keyword
+" characters and the right character is not the same quote.
+"-------------------------------------------------------------------------------
+function! QuoteInsertionWrapper (quote)
+  let col   = col('.')
+  let line  = getline('.')
+  if    ( line[col-2] =~ '\k'    )
+  \  || ( line[col  ] =~ '\k'    )
+  \  || ( line[col-2] =~ a:quote )
+  \  || ( line[col  ] =~ a:quote )
+    return a:quote
+  else
+    return a:quote.a:quote."\<Left>"
+  endif
+endfunction 
+"
+"===============================================================================
 " VARIOUS PLUGIN CONFIGURATIONS
-"===================================================================================
+"===============================================================================
 "
 "-------------------------------------------------------------------------------
-" c.vim
+" plugin bash-support.vim
 "-------------------------------------------------------------------------------
-"            
 " --empty --
 "                         
 "-------------------------------------------------------------------------------
 " taglist.vim : toggle the taglist window
-" taglist.vim : define the title texts for make
-" taglist.vim : define the title texts for qmake
 "-------------------------------------------------------------------------------
  noremap <silent> <F11>  <Esc><Esc>:Tlist<CR>
 inoremap <silent> <F11>  <Esc><Esc>:Tlist<CR>
-
-let Tlist_GainFocus_On_ToggleOpen = 1
-let Tlist_Close_On_Select 				= 1
-
-let tlist_make_settings  = 'make;m:makros;t:targets'
-let tlist_qmake_settings = 'qmake;t:SystemVariables'
-
-if has("autocmd")
-  " ----------  qmake : set filetype for *.pro  ----------
-  autocmd BufNewFile,BufRead *.pro  set filetype=qmake
-endif " has("autocmd")
 

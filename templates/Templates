@@ -4,7 +4,7 @@
 §  enable advanced features
 § =============================================================
 
-InterfaceVersion ( '1.0' )
+InterfaceVersion ( "1.0" )
 
 § =============================================================
 §  Settings
@@ -22,34 +22,41 @@ SetFormat( 'DATE', '%x' )
 SetFormat( 'TIME', '%X' )
 SetFormat( 'YEAR', '%Y' )
 
-§ pretty dates:
-§ - DATE_PRETTY1 is a nicer date formatting, such as "January 06 2016"
-§ - DATE_PRETTY2 is a shorter version, such as "Jan 06 2016"
-SetFormat( 'DATE_PRETTY1', '%B %d %Y' )
-SetFormat( 'DATE_PRETTY2', '%b %d %Y' )
-
 SetStyle( 'default' )
 
 § =============================================================
 §  File Includes and Shortcuts
 § =============================================================
 
-MenuShortcut( 'Comments',      'c' )
-MenuShortcut( 'Statements',    's' )
-MenuShortcut( 'Idioms',        'i' )
-MenuShortcut( 'Regex',         'x' )
-MenuShortcut( 'Perl',          'p' )
-MenuShortcut( 'Documentation', 'd' )
+§ :TODO:14.07.13 12:50:WM: files "paramsub.templates" and "io-redirection.templates": maps, shortcuts? sort alphabetically?
 
-IncludeFile( 'comments.templates' )
-IncludeFile( 'statements.templates' )
-IncludeFile( 'idioms.templates' )
-IncludeFile( 'regex.templates' )
-IncludeFile( 'perl.templates' )
-IncludeFile( 'documentation.templates' )
+MenuShortcut( 'Comments',        'c' )
+MenuShortcut( 'Statements',      's' )
+MenuShortcut( 'Tests',           't' )
+MenuShortcut( 'ParamSub',        'p' )
+MenuShortcut( 'PatternMatching', 'p' )
+MenuShortcut( 'IO-Redir',        'i' )
+
+IncludeFile( 'comments.templates'        )
+IncludeFile( 'statements.templates'      )
+IncludeFile( 'tests.templates'           )
+IncludeFile( 'paramsub.templates'        )
+IncludeFile( 'specialparams.templates'   )
+IncludeFile( 'environment.templates'     )
+IncludeFile( 'builtins.templates'        )
+IncludeFile( 'set.templates'             )
+IncludeFile( 'shelloptions.templates'    )
+IncludeFile( 'io-redirection.templates'  )
+IncludeFile( 'patternmatching.templates' )
 
 § =============================================================
 §  Help
+§
+§  help English:
+§  - pick up the word under the cursor
+§  - delete non-word characters before calling the help
+§  - the word is always included in the URL in lowercase,
+§    which seems to work better
 § =============================================================
 
 SetMacro( 'HelpPathEnglish', 'http://en.wiktionary.org/wiki/' )
